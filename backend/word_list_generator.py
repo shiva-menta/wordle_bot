@@ -1,11 +1,12 @@
 import string
 import csv
 import requests
+import config
 
 url = "https://wordsapiv1.p.rapidapi.com/words/"
 
 headers = {
-	
+	"X-RapidAPI-Key": config.wordle_api_key,
 	"X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com"
 }
 
