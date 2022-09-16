@@ -5,7 +5,7 @@ import requests
 url = "https://wordsapiv1.p.rapidapi.com/words/"
 
 headers = {
-	"X-RapidAPI-Key": "cf5f9da48fmshbf6b132f0b1a3e0p1226e7jsn27b9f98304d7",
+	
 	"X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com"
 }
 
