@@ -3,6 +3,7 @@ import string
 import csv
 import os
 from datetime import date
+from collections import Counter
 
 URL = "https://www.nytimes.com/games-assets/v2/wordle.1b4655b170d30c964441b708a4e22b3e617499a1.js"
 page = requests.get(URL)
@@ -49,17 +50,19 @@ def filter_words(guess, template, word_list):
     print(cleaned_words_list)
             
 def get_answer_template(guess, answer):
-    guess_array = list(guess)
-    answer_array = list(answer)
-    return_list = []
+    return_list = ['x'] * 5
+    stor = Counter(answer)
+    
 
     for i in range(5):
-        if guess_array[i] == answer_array[i]:
-            return_list.append("g")
-        elif guess_array[i] in answer_array:
-            return_list.append("y")
-        else :
-            return_list.append("x")
+        if guess[i] == answer[i]:
+            return_list[i] = 'g'
+            del stor[answer[i]]
+
+    for i in range(5):
+        if guess[i] in stor.keys():
+            return_list[i] = 'y'
+            del stor[guess[i]]
 
     return ''.join(return_list)
 
@@ -105,6 +108,5 @@ def source_todays_word():
 
 
 # filter_words("crane", "xxyxg", ['alike','ranch','strre','saute','alive'])
-# print(get_answer_template("racea", "raesh"))
+print(get_answer_template("shiee", "icert"))
 # read_answer_array_into_csv(source_and_clean_wordle_text_dump())
-get_todays_word()
