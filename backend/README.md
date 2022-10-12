@@ -45,11 +45,11 @@ Now that we've explained both terms, we'll simply use our Python scripts
 to calculate the optimal guess at each round until a guess is made. 
 
 To make the bot perform even better, I added an endgame solution parameter of
-N = 3. Essentially, once the word pool is N = 2,3, the Wordle bot will choose
-the word that has the highest frequency according to word usage data. The pool
-of Wordle answers is relatively small (~2000), and they're generally the most
-frequently used / common five-letter words. For this reason, once we reach a
-small enough word pool, we'll select our next guess using this method.
+N = 3. Essentially, once the word pool is length N = 2,3, the Wordle bot will 
+choose the word that has the highest frequency according to word usage data. 
+The pool of Wordle answers is relatively small (~2000), and they're generally 
+the most frequently used / common five-letter words. For this reason, once we 
+reach a small enough word pool, we'll select our next guess using this method.
 
 With this, our logic is complete. Hope you enjoy the project :)
 
