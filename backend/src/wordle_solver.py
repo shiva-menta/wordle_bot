@@ -5,7 +5,7 @@ import csv
 import os
 import math
 from itertools import product
-from datetime import date
+from datetime import date, datetime
 from collections import Counter
 from typing import List
 
@@ -20,6 +20,23 @@ start_date = date(2021, 6, 19)
 endgame_threshold = 3
 URL = """https://www.nytimes.com/games-assets/v2/wordle.1b4655b170d30c964441b7
 08a4e22b3e617499a1.js"""
+
+
+
+# Timestamp Printing Functions
+def write_file(filename,data):
+    if os.path.isfile(filename):
+        with open(filename, 'a') as f:          
+            f.write('\n' + data)   
+    else:
+        with open(filename, 'w') as f:                   
+            f.write(data)
+ 
+def print_time():   
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    data = "Current Time = " + current_time
+    return data
 
 
 
@@ -325,3 +342,5 @@ db = firestore.client()
 words, templates = play_full_game()
 db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
     words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
+
+write_file('timestamp.txt', print_time())
