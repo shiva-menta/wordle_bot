@@ -4,6 +4,7 @@ import string
 import csv
 import os
 import math
+import pathlib
 from itertools import product
 from datetime import date, datetime
 from collections import Counter
@@ -43,7 +44,7 @@ def print_time():
 
 # Word Sourcing Functions
 def read_in_word_list() -> None: # reads in all five-letter words
-    file = open('./src/word-list.csv','r')
+    file = open(pathlib.Path(__file__).parent / 'word-list.csv','r')
     for word in file.readlines():
         total_word_list.append(word.strip())
     
@@ -53,7 +54,7 @@ def return_highest_frequency_word(word_list: List[str]) -> str: # returns the wo
     freq = float('-inf')
     word = None
 
-    file = open('./src/word-frequency-data.csv')
+    file = open(pathlib.Path(__file__).parent / 'word-frequency-data.csv')
     csvreader = csv.reader(file)
     for row in csvreader:
         arr = row[0].split(' ')
@@ -97,7 +98,7 @@ def get_todays_word() -> str: # returns today's Wordle answer
     curr_date = date.today()
     csv_row = abs(curr_date - start_date).days
 
-    file = open('./src/answers.csv', 'r')
+    file = open(pathlib.Path(__file__).parent / 'answers.csv', 'r')
     todays_word = file.readlines()[csv_row].strip()
     file.close()
 
@@ -248,9 +249,9 @@ def calc_best_guess_data() -> None: # calculates expected value for each word an
         exp = 0
         print(ans)
 
-    file = open('./src/best-words.csv', 'w')
+    file = open('./best-words.csv', 'w')
     file.close()
-    with open('./src/best-words.csv', 'a', newline='') as csvfile:
+    with open('./best-words.csv', 'a', newline='') as csvfile:
         wordwriter = csv.writer(csvfile, delimiter=" ", quotechar='|', 
             quoting=csv.QUOTE_MINIMAL)
         for ind, word in enumerate(word_list):
@@ -260,7 +261,7 @@ def get_best_first_guess() -> str: # returns the best guess based on expected va
     exp = float('-inf')
     word = None
 
-    file = open('./src/best-words.csv')
+    file = open(pathlib.Path(__file__).parent / 'best-words.csv')
     csvreader = csv.reader(file)
     for row in csvreader:
         arr = row[0].split(' ')
@@ -335,7 +336,7 @@ def get_num_guesses(templates: List[str]) -> int:
 
 
 # Executed Code
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -343,4 +344,8 @@ words, templates = play_full_game()
 db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
     words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
-write_file('timestamp.txt', print_time())
+write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
+
+
+# Crontab previous command
+# 0 12  * * * cd /Users/shivamenta/repos/wordle_bot/src && /Users/shivamenta/opt/anaconda3/bin/python wordle_solver.py
