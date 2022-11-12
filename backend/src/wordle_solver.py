@@ -9,6 +9,7 @@ from itertools import product
 from datetime import date, datetime
 from collections import Counter
 from typing import List
+from lxml import html
 
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -17,7 +18,7 @@ from firebase_admin import credentials, firestore
 total_word_list = []
 
 # constants
-start_date = date(2021, 6, 19)
+start_date = date(2019, 6, 12)
 endgame_threshold = 3
 URL = """https://www.nytimes.com/games-assets/v2/wordle.1b4655b170d30c964441b7
 08a4e22b3e617499a1.js"""
@@ -94,7 +95,9 @@ def read_answer_array_into_csv(lst: List[str]) -> None: # writes given list data
             cln_word = word[1:-1]
             wordwriter.writerow([cln_word])
 
-def get_todays_word() -> str: # returns today's Wordle answer
+
+# old
+def get_todays_word_sitesource() -> str: # returns today's Wordle answer
     curr_date = date.today()
     csv_row = abs(curr_date - start_date).days
 
@@ -103,6 +106,13 @@ def get_todays_word() -> str: # returns today's Wordle answer
     file.close()
 
     return todays_word
+
+# updated
+def get_todays_word_unofficial() -> str: # returns today's Wordle answer
+    page = requests.get('https://tryhardguides.com/wordle-answers/')
+    tree = html.fromstring(page.content)
+    hidden_word = tree.xpath('//span[@class="hidden-text d-none"]//strong/text()')
+    return hidden_word[0].lower()
 
 
 
@@ -298,7 +308,7 @@ def find_cond_best_guess(template: str, word_list: List[str]) -> str: # returns 
 
 
 # Full Game Code
-def play_full_game(ans=get_todays_word()):
+def play_full_game(ans=get_todays_word_unofficial()):
     guess_arr = []
     temp_arr = []
     curr = None
@@ -308,6 +318,8 @@ def play_full_game(ans=get_todays_word()):
     temp = 'xxxxx'
 
     while curr != ans and len(guess_arr) <= 6:
+        print(curr)
+
         if len(guess_arr) == 0:
             curr = get_best_first_guess()
         elif len(word_list) <= endgame_threshold:
