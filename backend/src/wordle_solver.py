@@ -318,8 +318,6 @@ def play_full_game(ans=get_todays_word_unofficial()):
     temp = 'xxxxx'
 
     while curr != ans and len(guess_arr) <= 6:
-        print(curr)
-
         if len(guess_arr) == 0:
             curr = get_best_first_guess()
         elif len(word_list) <= endgame_threshold:
