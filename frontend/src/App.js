@@ -112,7 +112,7 @@ function App() {
         <div className="footer">
           <div className="footer-text">V1 | Shiva Menta. 2022.</div>
           <div className="footer-links">
-            <a href="https://cypher-accelerator.web.app/" target="_blank" 
+            <a href="https://shivamenta.me/" target="_blank" 
               rel="noopener noreferrer"><TbWorld size={25} color={"#444647"}/>
             </a>
             <a href="https://github.com/shiva-menta" target="_blank" 
