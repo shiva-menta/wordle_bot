@@ -146,6 +146,10 @@ body {
 
 /* #region Page Splits */
 @media screen and (max-width: 900px) {
+  .App {
+    height: auto;
+  }
+
   .page-contents {
     flex-direction: column;
   }
