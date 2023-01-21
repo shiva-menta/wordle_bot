@@ -368,7 +368,7 @@ def get_num_guesses(templates: List[str]) -> int:
 # Executed Code
 def main():
     # cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json')
-    cred = {
+    json = {
         "type": "service_account",
         "project_id": environ["FIREBASE_PROJECT_ID"],
         "private_key_id": environ["FIREBASE_PRIVATE_KEY_ID"],
@@ -380,7 +380,7 @@ def main():
         "auth_provider_x509_cert_url": environ["FIREBASE_AUTH_CERT"],
         "client_x509_cert_url": environ["FIREBASE_CLIENT_CERT"]
     }
-    print(cred)
+    cred = credentials.Certificate(json)
     firebase_admin.initialize_app(cred)
 
     db = firestore.client()
