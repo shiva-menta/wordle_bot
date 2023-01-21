@@ -365,13 +365,17 @@ def get_num_guesses(templates: List[str]) -> int:
 
 
 # Executed Code
-cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json')
-firebase_admin.initialize_app(cred)
+def main():
+    cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json')
+    firebase_admin.initialize_app(cred)
 
-db = firestore.client()
-words, templates = play_full_game('tests')
-db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
-    words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
+    db = firestore.client()
+    words, templates = play_full_game('tests')
+    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+        words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
-write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
+    write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
+
+if __name__ == "__main__":
+    main()
 
