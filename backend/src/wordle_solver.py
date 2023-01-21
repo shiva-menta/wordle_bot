@@ -11,6 +11,8 @@ from datetime import date, datetime
 from collections import Counter
 from typing import List
 from lxml import html
+import json
+from dotenv import load_dotenv
 
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -364,10 +366,18 @@ def get_num_guesses(templates: List[str]) -> int:
     else:
         return 7
 
+# env file generation
+def envgen():
+    data = json.load(open(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json'))
+    f = open(".env", "x")
+    for key, value in data.items():
+        f.write(f'{key.upper()}="{value}"\n')
 
 # Executed Code
 def main():
-    # cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAccountKey.json')
+    # dot_envpath = pathlib.Path(__file__).parent.parent / '.env'
+    # load_dotenv()
+
     json = {
         "type": "service_account",
         "project_id": environ["FIREBASE_PROJECT_ID"],
@@ -389,7 +399,7 @@ def main():
         words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
     write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
-
+    
 if __name__ == "__main__":
     main()
 
