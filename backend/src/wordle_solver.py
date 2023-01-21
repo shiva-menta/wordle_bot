@@ -12,7 +12,7 @@ from collections import Counter
 from typing import List
 from lxml import html
 import json
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 import firebase_admin
 from firebase_admin import credentials, firestore
