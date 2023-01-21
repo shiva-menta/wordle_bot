@@ -16,10 +16,11 @@ from firebase_admin import credentials, firestore
 
 # global variables
 total_word_list = []
+total_word_freq_dict = {}
 
 # constants
 start_date = date(2019, 6, 12)
-endgame_threshold = 3
+endgame_threshold = 2
 URL = """https://www.nytimes.com/games-assets/v2/wordle.1b4655b170d30c964441b7
 08a4e22b3e617499a1.js"""
 
@@ -49,6 +50,16 @@ def read_in_word_list() -> None: # reads in all five-letter words
     for word in file.readlines():
         total_word_list.append(word.strip())
     
+    file.close()
+
+def read_in_word_frequencies() -> None: # reads in all word frequency data into global dict
+    file = open(pathlib.Path(__file__).parent / 'word-frequency-data.csv')
+    csvreader = csv.reader(file)
+
+    for row in csvreader:
+        arr = row[0].split(' ')
+        if arr[1] != "Missing['NotAvailable']":
+            total_word_freq_dict[arr[0]] = float(arr[1])
     file.close()
 
 def return_highest_frequency_word(word_list: List[str]) -> str: # returns the word with the highest word frequency
@@ -282,7 +293,7 @@ def get_best_first_guess() -> str: # returns the best guess based on expected va
 
     return word
 
-def find_cond_best_guess(template: str, word_list: List[str]) -> str: # returns the best guess given a template and word list (for intermediate guesses)
+def find_cond_best_guess(template: str, word_list: List[str], freq: bool) -> str: # returns the best guess given a template and word list (for intermediate guesses)
     denom = len(word_list)
     exp_val = [0] * denom
     template_dict = {}
@@ -302,6 +313,13 @@ def find_cond_best_guess(template: str, word_list: List[str]) -> str: # returns 
         template_dict = dict.fromkeys(template_dict, 0)
         exp = 0
 
+    if freq:
+        for i in range(denom):
+            val = 0.0000000000001
+            if word_list[i] in total_word_freq_dict:
+                val = total_word_freq_dict[word_list[i]]
+            exp_val[i] *= val
+
     return word_list[exp_val.index(max(exp_val))]
 
 
@@ -314,16 +332,17 @@ def play_full_game(ans=get_todays_word_unofficial()):
     curr = None
 
     read_in_word_list()
+    read_in_word_frequencies()
     word_list = total_word_list
     temp = 'xxxxx'
 
     while curr != ans and len(guess_arr) <= 6:
         if len(guess_arr) == 0:
             curr = get_best_first_guess()
-        elif len(word_list) <= endgame_threshold:
-            curr = return_highest_frequency_word(word_list)
+        elif len(guess_arr) >= endgame_threshold:
+            curr = find_cond_best_guess(temp, word_list, True)
         else:
-            curr = find_cond_best_guess(temp, word_list)
+            curr = find_cond_best_guess(temp, word_list, False)
         
         guess_arr.append(curr)
         
@@ -350,12 +369,9 @@ cred = credentials.Certificate(pathlib.Path(__file__).parent.parent / 'serviceAc
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-words, templates = play_full_game()
+words, templates = play_full_game('tests')
 db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
     words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
 write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
 
-
-# Crontab previous command
-# 0 12  * * * cd /Users/shivamenta/repos/wordle_bot/src && /Users/shivamenta/opt/anaconda3/bin/python wordle_solver.py
