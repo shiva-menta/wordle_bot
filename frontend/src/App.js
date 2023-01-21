@@ -1,6 +1,7 @@
 // Imports
 import './App.css';
 import firebase from './firebase';
+import { collection, getDocs, orderBy, query, limit } from "firebase/firestore";
 
 import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -8,12 +9,11 @@ import { motion } from "framer-motion"
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title,
   Tooltip } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import ReactTooltip from "react-tooltip";
 
 import SquareLoader from "react-spinners/SquareLoader";
 import { FaGithub } from 'react-icons/fa';
 import { TbWorld } from 'react-icons/tb';
-
-import { collection, getDocs, orderBy, query, limit } from "firebase/firestore";
 
 // ChartJS Information
 ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip);
@@ -27,7 +27,10 @@ function App() {
   const [guessData, setGuessData] = useState([]);
   const [todaysWordGuesses, setTodaysWordGuesses] = useState([]);
   const [todaysWordTemplates, setTodaysWordTemplates] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [textToCopy, setTextToCopy] = useState("");
+  const [avgGuess, setAvgGuess] = useState("0");
+  const [tooltipText, setTooltipText] = useState("Copy Results")
+  const [loading, setLoading] = useState(true)
   
   // Effect Hooks
   useEffect(() => {
@@ -35,6 +38,17 @@ function App() {
   }, []);
 
   // Functions
+  // Get Today's Wordle Number
+  const getWordleNumber = () => {
+    const currDate = new Date();
+    const baseDate = new Date('6/20/2021');
+
+    let difference = currDate.getTime() - baseDate.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays;
+  }
+
+  // Source Firebase Data and Update State
   const getFirebase = async () => {
     setLoading(true);
     const allDocsQuerySnapshot = await getDocs(collection(firebase.firestore(), 
@@ -42,6 +56,7 @@ function App() {
     const q = query(collection(firebase.firestore(), "daily-game"), 
       orderBy('date', 'desc'), limit(1));
     const mostRecentGuessQuerySnapshot = await getDocs(q);
+    var ttcString = "";
 
     const allDocs = [];
     const mostRecentGuessArray = [];
@@ -63,6 +78,34 @@ function App() {
     setTodaysWordGuesses(mostRecentGuessArray[0].guesses);
     setTodaysWordTemplates(mostRecentGuessArray[0].guess_templates);
 
+    const average = array => array.reduce((a, b) => a + b) / array.length;
+    setAvgGuess(average(attemptsArray).toFixed(2));
+
+    mostRecentGuessArray[0].guess_templates.forEach(template => {
+      var printGuess = "";
+      printGuess += "\r\n";
+
+      for (let i = 0; i < template.length; i++) {
+        switch (template[i]) {
+          case 'x':
+            printGuess += "⬜";
+            break;
+          case 'y':
+            printGuess += "🟨";
+            break;
+          case 'g':
+            printGuess += "🟩";
+            break;
+        }
+      }
+
+      ttcString += printGuess;
+    });
+
+
+    setTextToCopy("Wordle" + ` ${getWordleNumber()}` + ` ${mostRecentGuessArray[0].guess_templates.length}/6` 
+      + "\r\n" + ttcString);
+
     setTimeout(() => {
       setLoading(false);
     }, 2000)
@@ -80,7 +123,6 @@ function App() {
 
     return (<div className="header-logo">{nameArr}</div>);
   }
-  
 
   // Render Method
   return (
@@ -98,19 +140,39 @@ function App() {
             </div>}
         </div>
         <div className="page-contents">
-          <div className="split-container solution">
-            <div className="section-title">Today's Solution</div>
-            {guessSolutionArray(todaysWordGuesses, todaysWordTemplates)}
+          <div className="description-container">
+            <div className="description">This bot solves the daily Wordle in <b>{avgGuess}</b> guesses on average.</div>
+            <div className="description">Reset as of January 20th, 2023.</div>
           </div>
-          <div className="split-container performance">
-            <div className="section-title">Performance Over Time</div>
-            <div className="chart-sizing-container">
-              {guessBarChart(guessData)}
+          <div className="split-group">
+            <div className="split-container solution">
+              <div key={tooltipText}>
+                <div className="section-title" 
+                    onClick={() => {navigator.clipboard.writeText(textToCopy); setTooltipText("Copied!")}}
+                    onMouseLeave={() => {setTooltipText("Copy Results")}}
+                    data-tip data-for="copyTip"
+                    data-iscapture="true"
+                    data-scroll-hide
+                    data-event="touchstart focus mouseover"
+                    data-event-off="mouseout">
+                  Today's Solution
+                </div>
+                <ReactTooltip id="copyTip" place="top" effect="solid" scrollHide={true} globalEventOff="touchstart,scroll">
+                  {tooltipText}
+                </ReactTooltip>
+              </div>
+              {guessSolutionArray(todaysWordGuesses, todaysWordTemplates)}
+            </div>
+            <div className="split-container performance">
+              <div className="section-title">Performance Over Time</div>
+              <div className="chart-sizing-container">
+                {guessBarChart(guessData)}
+              </div>
             </div>
           </div>
         </div>
         <div className="footer">
-          <div className="footer-text">V1 | Shiva Menta. 2022.</div>
+          <div className="footer-text">V2 | Shiva Menta. 2023.</div>
           <div className="footer-links">
             <a href="https://shivamenta.me/" target="_blank" 
               rel="noopener noreferrer"><TbWorld size={25} color={"#444647"}/>
@@ -121,7 +183,7 @@ function App() {
           </div>
         </div>
       </div>)}
-  </div>
+    </div>  
   );
 }
 
