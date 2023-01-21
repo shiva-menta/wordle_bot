@@ -375,8 +375,8 @@ def envgen():
 
 # Executed Code
 def main():
-    dot_envpath = pathlib.Path(__file__).parent.parent / '.env'
-    load_dotenv()
+    # dot_envpath = pathlib.Path(__file__).parent.parent / '.env'
+    # load_dotenv()
 
     json = {
         "type": "service_account",
