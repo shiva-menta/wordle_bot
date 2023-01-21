@@ -29,6 +29,7 @@ function App() {
   const [todaysWordTemplates, setTodaysWordTemplates] = useState([]);
   const [textToCopy, setTextToCopy] = useState("");
   const [avgGuess, setAvgGuess] = useState("0");
+  const [totalDays, setTotalDays] = useState("0");
   const [tooltipText, setTooltipText] = useState("Copy Results")
   const [loading, setLoading] = useState(true)
   
@@ -80,6 +81,7 @@ function App() {
 
     const average = array => array.reduce((a, b) => a + b) / array.length;
     setAvgGuess(average(attemptsArray).toFixed(2));
+    setTotalDays(allDocs.length);
 
     mostRecentGuessArray[0].guess_templates.forEach(template => {
       var printGuess = "";
@@ -141,7 +143,7 @@ function App() {
         </div>
         <div className="page-contents">
           <div className="description-container">
-            <div className="description">This bot solves the daily Wordle in <b>{avgGuess}</b> guesses on average.</div>
+            <div className="description">This bot solved the daily Wordle in <b>{avgGuess}</b> guesses on average across <b>{totalDays}</b> days.</div>
             <div className="description">Reset as of January 20th, 2023.</div>
           </div>
           <div className="split-group">
