@@ -380,6 +380,7 @@ def main():
         "auth_provider_x509_cert_url": environ["FIREBASE_AUTH_CERT"],
         "client_x509_cert_url": environ["FIREBASE_CLIENT_CERT"]
     }
+    print(cred)
     firebase_admin.initialize_app(cred)
 
     db = firestore.client()
