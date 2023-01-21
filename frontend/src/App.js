@@ -11,7 +11,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title,
 import { Bar } from 'react-chartjs-2';
 import ReactTooltip from "react-tooltip";
 
-import SquareLoader from "react-spinners/SquareLoader";
+import SquareLoader from "react-spinners/GridLoader";
 import { FaGithub } from 'react-icons/fa';
 import { TbWorld } from 'react-icons/tb';
 
@@ -129,7 +129,11 @@ function App() {
   // Render Method
   return (
     <div className="App">
-      {loading ? (<SquareLoader size={75} color={'#6aaa64'} loading={loading}/>) : (
+      {loading ? (
+        <div className="loading-page">
+          <SquareLoader size={20} color={'#6aaa64'} loading={loading}/>
+        </div>
+      ) : (
       <div className="wordle-bot-page">
         <div className="header">
           {isLargerThanSplit ? createHeaderLogo("Wordle Bot", ["#6aaa64", 
