@@ -384,7 +384,7 @@ def main():
     firebase_admin.initialize_app(cred)
 
     db = firestore.client()
-    words, templates = play_full_game('tests')
+    words, templates = play_full_game()
     db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
         words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
