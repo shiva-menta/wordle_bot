@@ -1,0 +1,418 @@
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "DNS resolution failed for service: firestore.googleapis.com"
+	debug_error_string = "{"created":"@1666698956.802071000","description":"Resolver transient failure","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":1325,"referenced_errors":[{"created":"@1666698956.802055000","description":"DNS resolution failed for service: firestore.googleapis.com","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/dns_resolver_ares.cc","file_line":360,"grpc_status":14,"referenced_errors":[{"created":"@1666698956.802007000","description":"C-ares status is not ARES_SUCCESS qtype=AAAA name=firestore.googleapis.com is_balancer=0: Could not contact DNS servers","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.cc","file_line":698,"referenced_errors":[{"created":"@1666698956.765299000","description":"C-ares status is not ARES_SUCCESS qtype=A name=firestore.googleapis.com is_balancer=0: Could not contact DNS servers","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.cc","file_line":698}]}]}]}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 184, in retry_target
+    return target()
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 59, in error_remapped_callable
+    six.raise_from(exceptions.from_grpc_error(exc), exc)
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.ServiceUnavailable: 503 DNS resolution failed for service: firestore.googleapis.com
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 344, in <module>
+    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/collection.py", line 107, in add
+    write_result = document_ref.create(document_data, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/document.py", line 99, in create
+    write_results = batch.commit(**kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/batch.py", line 57, in commit
+    commit_response = self._client._firestore_api.commit(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/services/firestore/client.py", line 821, in commit
+    response = rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/gapic_v1/method.py", line 145, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 281, in retry_wrapped_func
+    return retry_target(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 199, in retry_target
+    six.raise_from(
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.RetryError: Deadline of 60.0s exceeded while calling functools.partial(<function _wrap_unary_errors.<locals>.error_remapped_callable at 0x7fd81546d1f0>, database: "projects/wordle-bot-83998/databases/(default)"
+writes {
+  update {
+    name: "projects/wordle-bot-83998/databases/(default)/documents/daily-game/iXA9JP1RhhTTHYfNQJCC"
+    fields {
+      key: "attempts"
+      value {
+        integer_value: 5
+      }
+    }
+    fields {
+      key: "guess_templates"
+      value {
+        array_value {
+          values {
+            string_value: "xxxxx"
+          }
+          values {
+            string_value: "xxyxg"
+          }
+          values {
+            string_value: "xgxxg"
+          }
+          values {
+            string_value: "xgggg"
+          }
+          values {
+            string_value: "ggggg"
+          }
+        }
+      }
+    }
+    fields {
+      key: "guesses"
+      value {
+        array_value {
+          values {
+            string_value: "tares"
+          }
+          values {
+            string_value: "piony"
+          }
+          values {
+            string_value: "moldy"
+          }
+          values {
+            string_value: "boggy"
+          }
+          values {
+            string_value: "foggy"
+          }
+        }
+      }
+    }
+  }
+  current_document {
+    exists: false
+  }
+  update_transforms {
+    field_path: "date"
+    set_to_server_value: REQUEST_TIME
+  }
+}
+, metadata=[('google-cloud-resource-prefix', 'projects/wordle-bot-83998/databases/(default)'), ('x-goog-request-params', 'database=projects/wordle-bot-83998/databases/%28default%29'), ('x-goog-api-client', 'gl-python/3.9.12 grpc/1.42.0 gax/1.25.1 gapic/2.1.3')]), last exception: 503 DNS resolution failed for service: firestore.googleapis.com
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "DNS resolution failed for service: firestore.googleapis.com"
+	debug_error_string = "{"created":"@1666783513.663012000","description":"Resolver transient failure","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":1325,"referenced_errors":[{"created":"@1666783513.662997000","description":"DNS resolution failed for service: firestore.googleapis.com","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/dns_resolver_ares.cc","file_line":360,"grpc_status":14,"referenced_errors":[{"created":"@1666783513.660942000","description":"C-ares status is not ARES_SUCCESS qtype=AAAA name=firestore.googleapis.com is_balancer=0: Could not contact DNS servers","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.cc","file_line":698,"referenced_errors":[{"created":"@1666783513.660837000","description":"C-ares status is not ARES_SUCCESS qtype=A name=firestore.googleapis.com is_balancer=0: Could not contact DNS servers","file":"src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.cc","file_line":698}]}]}]}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 184, in retry_target
+    return target()
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 59, in error_remapped_callable
+    six.raise_from(exceptions.from_grpc_error(exc), exc)
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.ServiceUnavailable: 503 DNS resolution failed for service: firestore.googleapis.com
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 344, in <module>
+    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/collection.py", line 107, in add
+    write_result = document_ref.create(document_data, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/document.py", line 99, in create
+    write_results = batch.commit(**kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/batch.py", line 57, in commit
+    commit_response = self._client._firestore_api.commit(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/services/firestore/client.py", line 821, in commit
+    response = rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/gapic_v1/method.py", line 145, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 281, in retry_wrapped_func
+    return retry_target(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 199, in retry_target
+    six.raise_from(
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.RetryError: Deadline of 60.0s exceeded while calling functools.partial(<function _wrap_unary_errors.<locals>.error_remapped_callable at 0x7faf8e4ad1f0>, database: "projects/wordle-bot-83998/databases/(default)"
+writes {
+  update {
+    name: "projects/wordle-bot-83998/databases/(default)/documents/daily-game/N7NIsapwc2STS3Rcd9HT"
+    fields {
+      key: "attempts"
+      value {
+        integer_value: 5
+      }
+    }
+    fields {
+      key: "guess_templates"
+      value {
+        array_value {
+          values {
+            string_value: "yxxxx"
+          }
+          values {
+            string_value: "xxxyg"
+          }
+          values {
+            string_value: "xgggg"
+          }
+          values {
+            string_value: "xgggg"
+          }
+          values {
+            string_value: "ggggg"
+          }
+        }
+      }
+    }
+    fields {
+      key: "guesses"
+      value {
+        array_value {
+          values {
+            string_value: "tares"
+          }
+          values {
+            string_value: "pinot"
+          }
+          values {
+            string_value: "glout"
+          }
+          values {
+            string_value: "clout"
+          }
+          values {
+            string_value: "flout"
+          }
+        }
+      }
+    }
+  }
+  current_document {
+    exists: false
+  }
+  update_transforms {
+    field_path: "date"
+    set_to_server_value: REQUEST_TIME
+  }
+}
+, metadata=[('google-cloud-resource-prefix', 'projects/wordle-bot-83998/databases/(default)'), ('x-goog-request-params', 'database=projects/wordle-bot-83998/databases/%28default%29'), ('x-goog-api-client', 'gl-python/3.9.12 grpc/1.42.0 gax/1.25.1 gapic/2.1.3')]), last exception: 503 DNS resolution failed for service: firestore.googleapis.com
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Connection reset by peer"
+	debug_error_string = "{"created":"@1667048404.863784000","description":"Error received from peer ipv4:142.250.72.106:443","file":"src/core/lib/surface/call.cc","file_line":1064,"grpc_message":"Connection reset by peer","grpc_status":14}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 184, in retry_target
+    return target()
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 59, in error_remapped_callable
+    six.raise_from(exceptions.from_grpc_error(exc), exc)
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.ServiceUnavailable: 503 Connection reset by peer
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 344, in <module>
+    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/collection.py", line 107, in add
+    write_result = document_ref.create(document_data, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/document.py", line 99, in create
+    write_results = batch.commit(**kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/batch.py", line 57, in commit
+    commit_response = self._client._firestore_api.commit(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/services/firestore/client.py", line 821, in commit
+    response = rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/gapic_v1/method.py", line 145, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 281, in retry_wrapped_func
+    return retry_target(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 199, in retry_target
+    six.raise_from(
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.RetryError: Deadline of 60.0s exceeded while calling functools.partial(<function _wrap_unary_errors.<locals>.error_remapped_callable at 0x7fca15b6c1f0>, database: "projects/wordle-bot-83998/databases/(default)"
+writes {
+  update {
+    name: "projects/wordle-bot-83998/databases/(default)/documents/daily-game/FD9tl85yqn3oC9r9uIT7"
+    fields {
+      key: "attempts"
+      value {
+        integer_value: 4
+      }
+    }
+    fields {
+      key: "guess_templates"
+      value {
+        array_value {
+          values {
+            string_value: "xxxgx"
+          }
+          values {
+            string_value: "gxxgx"
+          }
+          values {
+            string_value: "gxxgg"
+          }
+          values {
+            string_value: "ggggg"
+          }
+        }
+      }
+    }
+    fields {
+      key: "guesses"
+      value {
+        array_value {
+          values {
+            string_value: "tares"
+          }
+          values {
+            string_value: "loden"
+          }
+          values {
+            string_value: "lemel"
+          }
+          values {
+            string_value: "libel"
+          }
+        }
+      }
+    }
+  }
+  current_document {
+    exists: false
+  }
+  update_transforms {
+    field_path: "date"
+    set_to_server_value: REQUEST_TIME
+  }
+}
+, metadata=[('google-cloud-resource-prefix', 'projects/wordle-bot-83998/databases/(default)'), ('x-goog-request-params', 'database=projects/wordle-bot-83998/databases/%28default%29'), ('x-goog-api-client', 'gl-python/3.9.12 grpc/1.42.0 gax/1.25.1 gapic/2.1.3')]), last exception: 503 Connection reset by peer
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    return callable_(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses"
+	debug_error_string = "{"created":"@1667648546.696838000","description":"Failed to pick subchannel","file":"src/core/ext/filters/client_channel/client_channel.cc","file_line":3094,"referenced_errors":[{"created":"@1667648546.674424000","description":"failed to connect to all addresses","file":"src/core/lib/transport/error_utils.cc","file_line":163,"grpc_status":14}]}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 184, in retry_target
+    return target()
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/grpc_helpers.py", line 59, in error_remapped_callable
+    six.raise_from(exceptions.from_grpc_error(exc), exc)
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.ServiceUnavailable: 503 failed to connect to all addresses
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 344, in <module>
+    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/collection.py", line 107, in add
+    write_result = document_ref.create(document_data, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/document.py", line 99, in create
+    write_results = batch.commit(**kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/batch.py", line 57, in commit
+    commit_response = self._client._firestore_api.commit(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/cloud/firestore_v1/services/firestore/client.py", line 821, in commit
+    response = rpc(request, retry=retry, timeout=timeout, metadata=metadata,)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/gapic_v1/method.py", line 145, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 281, in retry_wrapped_func
+    return retry_target(
+  File "/Users/shivamenta/opt/anaconda3/lib/python3.9/site-packages/google/api_core/retry.py", line 199, in retry_target
+    six.raise_from(
+  File "<string>", line 3, in raise_from
+google.api_core.exceptions.RetryError: Deadline of 60.0s exceeded while calling functools.partial(<function _wrap_unary_errors.<locals>.error_remapped_callable at 0x7ff4d746b1f0>, database: "projects/wordle-bot-83998/databases/(default)"
+writes {
+  update {
+    name: "projects/wordle-bot-83998/databases/(default)/documents/daily-game/gQzPcOPqiWrIGYjt9u1B"
+    fields {
+      key: "attempts"
+      value {
+        integer_value: 3
+      }
+    }
+    fields {
+      key: "guess_templates"
+      value {
+        array_value {
+          values {
+            string_value: "xyyyx"
+          }
+          values {
+            string_value: "xyyyy"
+          }
+          values {
+            string_value: "ggggg"
+          }
+        }
+      }
+    }
+    fields {
+      key: "guesses"
+      value {
+        array_value {
+          values {
+            string_value: "tares"
+          }
+          values {
+            string_value: "beard"
+          }
+          values {
+            string_value: "dream"
+          }
+        }
+      }
+    }
+  }
+  current_document {
+    exists: false
+  }
+  update_transforms {
+    field_path: "date"
+    set_to_server_value: REQUEST_TIME
+  }
+}
+, metadata=[('google-cloud-resource-prefix', 'projects/wordle-bot-83998/databases/(default)'), ('x-goog-request-params', 'database=projects/wordle-bot-83998/databases/%28default%29'), ('x-goog-api-client', 'gl-python/3.9.12 grpc/1.42.0 gax/1.25.1 gapic/2.1.3')]), last exception: 503 failed to connect to all addresses
+Traceback (most recent call last):
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 343, in <module>
+    words, templates = play_full_game()
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 320, in play_full_game
+    temp = get_answer_template(curr, ans)
+  File "/Users/shivamenta/repos/wordle_bot/src/wordle_solver.py", line 146, in get_answer_template
+    if guess[i] == answer[i]:
+TypeError: 'NoneType' object is not subscriptable
