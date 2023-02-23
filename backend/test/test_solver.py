@@ -1,4 +1,4 @@
-from wordle_bot.src.wordle_solver import *
+from src.wordle_solver import *
 
 
 # expected_value tests

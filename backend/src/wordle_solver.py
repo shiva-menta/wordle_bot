@@ -218,12 +218,12 @@ def word_matches_template(guess: str, word: str, template: str) -> bool: # check
             act_ind = val
 
             check_ind = pot_yel_ind.copy()
-  
+
             for ind in act_ind:
                 if key == guess[ind]:
                     return False
                 check_ind.remove(ind)
-            
+
             for ind in check_ind:
                 if key == guess[ind] and act_ind:
                     act_ind.pop()
@@ -231,9 +231,10 @@ def word_matches_template(guess: str, word: str, template: str) -> bool: # check
             if act_ind:
                 return False
     
+    # check against letters you know don't exist (if there are gray letters, )
     if gray_stor:
         for ind in pot_yel_ind:
-            if guess[ind] in gray_stor:
+            if guess[ind] in gray_stor and guess[ind] not in yel_stor.keys():
                 return False
 
     return True
@@ -348,7 +349,7 @@ def play_full_game(ans=get_todays_word_unofficial()):
             curr = find_cond_best_guess(temp, word_list, False)
         
         guess_arr.append(curr)
-        
+
         temp = get_answer_template(curr, ans)
 
         temp_arr.append(temp)
@@ -378,27 +379,28 @@ def main():
     # dot_envpath = pathlib.Path(__file__).parent.parent / '.env'
     # load_dotenv()
 
-    json = {
-        "type": "service_account",
-        "project_id": environ["FIREBASE_PROJECT_ID"],
-        "private_key_id": environ["FIREBASE_PRIVATE_KEY_ID"],
-        "private_key": environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n"),
-        "client_email": environ["FIREBASE_CLIENT_EMAIL"],
-        "client_id": environ["FIREBASE_CLIENT_ID"],
-        "auth_uri": environ["FIREBASE_AUTH_URI"],
-        "token_uri": environ["FIREBASE_TOKEN_URI"],
-        "auth_provider_x509_cert_url": environ["FIREBASE_AUTH_CERT"],
-        "client_x509_cert_url": environ["FIREBASE_CLIENT_CERT"]
-    }
-    cred = credentials.Certificate(json)
-    firebase_admin.initialize_app(cred)
+    # json = {
+    #     "type": "service_account",
+    #     "project_id": environ["FIREBASE_PROJECT_ID"],
+    #     "private_key_id": environ["FIREBASE_PRIVATE_KEY_ID"],
+    #     "private_key": environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n"),
+    #     "client_email": environ["FIREBASE_CLIENT_EMAIL"],
+    #     "client_id": environ["FIREBASE_CLIENT_ID"],
+    #     "auth_uri": environ["FIREBASE_AUTH_URI"],
+    #     "token_uri": environ["FIREBASE_TOKEN_URI"],
+    #     "auth_provider_x509_cert_url": environ["FIREBASE_AUTH_CERT"],
+    #     "client_x509_cert_url": environ["FIREBASE_CLIENT_CERT"]
+    # }
+    # cred = credentials.Certificate(json)
+    # firebase_admin.initialize_app(cred)
 
-    db = firestore.client()
+    # db = firestore.client()
     words, templates = play_full_game()
-    db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
-        words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
+    print(words, templates)
+    # db.collection('daily-game').add({'date': firestore.SERVER_TIMESTAMP, 'guesses': 
+    #     words, 'guess_templates': templates, 'attempts': get_num_guesses(templates)})
 
-    write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
+    # write_file(pathlib.Path(__file__).parent / 'timestamp.txt', print_time())
     
 if __name__ == "__main__":
     main()
